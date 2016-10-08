@@ -1,0 +1,7 @@
+{
+  "extends": "loopback",
+  "rules": {
+    "comma-dangle": 0,
+    "max-len": 0
+  }
+}

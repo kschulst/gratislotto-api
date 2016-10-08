@@ -1,0 +1,28 @@
+{
+  "name": "Kupong",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "rekker": {
+      "type": [
+        "array"
+      ],
+      "required": true
+    },
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "innsendtDato": {
+      "type": "date",
+      "default": "$now"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
