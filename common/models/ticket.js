@@ -2,28 +2,28 @@
 
 var every = require('lodash/every');
 
-module.exports = function(Kupong) {
-  Kupong.validate('rekker', customValidator, {message: 'Bad name'});
-  function customValidator(err) {
+module.exports = function(Ticket) {
+  Ticket.validate('rows', ticketValidator, {message: 'Invalid lotto ticket'});
+//  Ticket.validatesAbsenceOf('registeredTimestamp');
 
-    if (this.rekker.length === 0 ) {
+  function ticketValidator(err) {
+    if (this.rows.length === 0 ) {
       err("lottoTicketMustHaveAtLeast1Row")
     }
-    if (this.rekker.length > 10) {
+    if (this.rows.length > 10) {
       err("lottoTicketCannotHaveMoreThan10Rows")
     }
 
-    for (var i = 0; i < this.rekker.length; i++) {
-      var rekke = this.rekker[i];
+    for (var i = 0; i < this.rows.length; i++) {
+      var row = this.rows[i];
 
-      if (rekke.length !== 7) {
-        err("lottoRekkeMustHave7Numbers");
+      if (row.length !== 7) {
+        err("lottoRowMustHave7Numbers");
       }
 
-      if (! every(rekke, n => (n<35 && n>0))) {
-        err("lottoRekkeMustBeNumbersBetween1And34");
+      if (! every(row, n => (n<35 && n>0))) {
+        err("lottoRowMustBeNumbersBetween1And34");
       }
-
     }
   };
 
