@@ -1,12 +1,12 @@
 {
-  "name": "Kupong",
+  "name": "Ticket",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "rekker": {
+    "rows": {
       "type": ["any"],
       "required": true
     },
@@ -14,7 +14,7 @@
       "type": "string",
       "required": true
     },
-    "innsendtDato": {
+    "registeredTimestamp": {
       "type": "date",
       "default": "$now"
     }

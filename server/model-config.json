@@ -13,10 +13,10 @@
       "./mixins"
     ]
   },
-  "Kupong": {
+  "Ticket": {
     "dataSource": "mongoDb",
     "public": true,
     "$promise": {},
-    "$resolved": true    
+    "$resolved": true
   }
 }
