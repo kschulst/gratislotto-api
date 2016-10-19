@@ -22,5 +22,10 @@
   "validations": [],
   "relations": {},
   "acls": [],
-  "methods": {}
+  "methods": {},
+  "mixins": {
+    "ReadOnly" : {
+      "registeredTimestamp": true
+    }
+  }
 }
