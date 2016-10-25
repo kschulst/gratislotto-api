@@ -7,7 +7,7 @@ module.exports = function(Ticket) {
 
   Ticket.validate('ticket', ticketValidator, {message: 'Invalid lotto ticket'});
   Ticket.validate('rows', rowsValidator, {message: 'Invalid lotto ticket'});
-
+// TODO Implement allow only one ticket per email
 
   function ticketValidator(err) {
     var checkit = new Checkit({
@@ -21,26 +21,26 @@ module.exports = function(Ticket) {
   };
 
   function rowsValidator(err) {
-    if (this.rows.length === 0 ) {
-      err("lottoTicketMustHaveAtLeast1Row")
-    }
-    if (this.rows.length > 10) {
-      err("lottoTicketCannotHaveMoreThan10Rows")
-    }
+    let validRows = 0;
+    for (var rowNo = 1; rowNo < 10; rowNo++) {
+      var row = this['row' + rowNo];
+      if (row) {
+        if (row.length !== 7 && row.length !== 0) {
+          err("lottoRowMustHave7Numbers");
+        }
+        if (! every(row, n => (n<35 && n>0))) {
+          err("lottoRowMustBeNumbersBetween1And34");
+        }
 
-    for (var i = 0; i < this.rows.length; i++) {
-      var row = this.rows[i];
-
-      if (row.length !== 7 && row.length !== 0) {
-        err("lottoRowMustHave7Numbers");
+        validRows++;
       }
-
-      if (! every(row, n => (n<35 && n>0))) {
-        err("lottoRowMustBeNumbersBetween1And34");
-      }
-
       // TODO: Implement numbers must be unique
     }
-  };
+
+    if (validRows == 0) {
+      err("lottoTicketMustHaveAtLeast1Row")
+    }
+  }
+
 
 };

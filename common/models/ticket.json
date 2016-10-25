@@ -1,15 +1,12 @@
 {
   "name": "Ticket",
   "base": "PersistedModel",
+  "strict": "validate",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "rows": {
-      "type": ["any"],
-      "required": true
-    },
     "email": {
       "type": "string",
       "required": true
@@ -17,6 +14,36 @@
     "registeredTimestamp": {
       "type": "date",
       "default": "$now"
+    },
+    "row1": {
+      "type": ["number"]
+    },
+    "row2": {
+      "type": ["number"]
+    },
+    "row3": {
+      "type": ["number"]
+    },
+    "row4": {
+      "type": ["number"]
+    },
+    "row5": {
+      "type": ["number"]
+    },
+    "row6": {
+      "type": ["number"]
+    },
+    "row7": {
+      "type": ["number"]
+    },
+    "row8": {
+      "type": ["number"]
+    },
+    "row9": {
+      "type": ["number"]
+    },
+    "row10": {
+      "type": ["number"]
     }
   },
   "validations": [],
