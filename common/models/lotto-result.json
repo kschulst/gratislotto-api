@@ -1,0 +1,39 @@
+{
+  "name": "LottoResult",
+  "base": "PersistedModel",
+  "strict": false,
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "generated": false
+    },
+    "drawDate": {
+      "type": "date"
+    },
+    "numbers": {
+      "type": ["number"]
+    },
+    "addNumbers": {
+      "type": ["number"]
+    },
+    "pricePerRow": {
+      "type": "number"
+    },
+    "prizes": {
+      "type": ["number"]
+    },
+    "turnover": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {},
+  "mixins": {}
+}

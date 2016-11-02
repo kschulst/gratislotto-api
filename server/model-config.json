@@ -19,5 +19,11 @@
     "public": true,
     "$promise": {},
     "$resolved": true
+  },
+  "LottoResult": {
+    "dataSource": "mongoDb",
+    "public": true,
+    "$promise": {},
+    "$resolved": true
   }
 }
