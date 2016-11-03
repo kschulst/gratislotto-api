@@ -77,9 +77,6 @@ module.exports = function(Ticket) {
         numbers: lottoResult.numbers,
         addNumbers: lottoResult.addNumbers
       },
-      row: {
-        numbers: rowNumbers
-      },
       isWin: isWin
     }
 
@@ -113,12 +110,10 @@ module.exports = function(Ticket) {
     }
   }
 
-  Ticket.prototype.statistics = function(calcStartDate, calcEndDate, cb) {
-    calcStartDate = calcStartDate || this.registeredTimestamp;
+  function ticketStatistics(cb, ticket, calcStartDate, calcEndDate) {
+    calcStartDate = calcStartDate || new Date("1985-05-01"); // TODO: Use constant instead
     calcEndDate = calcEndDate || new Date();
-
     var app = Ticket.app;
-    var ticket = this;
     var rowCount = countRows(ticket);
 
     app.models.LottoResult.find({
@@ -137,9 +132,9 @@ module.exports = function(Ticket) {
       var drawCount = lottoResults.length;
       var drawsWithWinCount = 0;
       var firstDrawDate = lottoResults[0].toObject().drawDate;
-      var lastDrawDate = lottoResults[lottoResults.length-1].toObject().drawDate;
+      var lastDrawDate = lottoResults[lottoResults.length - 1].toObject().drawDate;
 
-      lottoResults.forEach(function(lottoResult) {
+      lottoResults.forEach(function (lottoResult) {
         var drawHasWin = false;
         var rowCost = rowCostByDate(lottoResult.drawDate);
 
@@ -147,7 +142,7 @@ module.exports = function(Ticket) {
           var rowNumbers = ticket['row' + rowNo];
           if (rowNumbers) {
 
-            if (! balance['row' + rowNo]) {
+            if (!balance['row' + rowNo]) {
               balance['row' + rowNo] = {
                 profit: 0,
                 cost: 0
@@ -157,7 +152,7 @@ module.exports = function(Ticket) {
             var match = matchRow(rowNumbers, lottoResult.toObject());
             if (match.isWin) {
               match.isWin = undefined;
-              match.row.rowNo = rowNo;
+              match.rowNo = rowNo;
               drawHasWin = true;
               wins.push(match);
               balance.total.profit += match.prize;
@@ -175,29 +170,33 @@ module.exports = function(Ticket) {
         if (drawHasWin) {
           drawsWithWinCount++;
         }
-
       }.bind(this));
 
       cb(null, {
-        "id": ticket.id,
-        "registeredDate": ticket.registeredTimestamp,
-        "calcStartDate": calcStartDate,
-        "calcEndDate": calcEndDate,
-        "firstDrawDate": firstDrawDate,
-        "lastDrawDate": lastDrawDate,
-        "rowCount": rowCount,
-        "drawCount": drawCount,
-        "rowsInDraws": rowCount * drawCount,
-        "drawsWithWinCount": drawsWithWinCount,
-        "drawsWithWinPct": _.round(drawsWithWinCount / drawCount, 4) * 100,
-        "drawsWithoutWinCount": drawCount - drawsWithWinCount,
-        "drawsWithoutWinPct": _.round((drawCount - drawsWithWinCount) / drawCount, 4) * 100,
-        "rowsWithWin": wins.length,
-        "balance": balance,
-        "winsByPrizeType": winsByPrizeType(wins),
-        "wins": wins
-      })
+        calcStartDate: calcStartDate,
+        calcEndDate: calcEndDate,
+        firstDrawDate: firstDrawDate,
+        lastDrawDate: lastDrawDate,
+        ticket: ticket,
+        rowCount: rowCount,
+        drawCount: drawCount,
+        rowsInDraws: rowCount * drawCount,
+        drawsWithWinCount: drawsWithWinCount,
+        drawsWithWinPct: _.round(drawsWithWinCount / drawCount, 4) * 100,
+        drawsWithoutWinCount: drawCount - drawsWithWinCount,
+        drawsWithoutWinPct: _.round((drawCount - drawsWithWinCount) / drawCount, 4) * 100,
+        rowsWithWin: wins.length,
+        balance: balance,
+        winsByPrizeType: winsByPrizeType(wins),
+        wins: wins
+      });
     }.bind(this));
+  }
+
+  Ticket.prototype.statistics = function(calcStartDate, calcEndDate, cb) {
+    calcStartDate = calcStartDate || this.registeredTimestamp;
+    var ticket = this.toObject();
+    ticketStatistics(cb, ticket, calcStartDate, calcEndDate);
   }
 
   Ticket.remoteMethod(
